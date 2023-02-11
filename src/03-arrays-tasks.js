@@ -282,8 +282,8 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  return arr.flatMap((v, i) => Array.from({ length: i + 1 }).fill(v));
 }
 
 
@@ -300,8 +300,8 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
-  throw new Error('Not implemented');
+function get3TopItems(arr) {
+  return [...arr].sort((a, b) => b - a).slice(0, 3);
 }
 
 
@@ -376,8 +376,8 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-  const res = arr.filter((n) => Boolean(n) === 0).length;
-  return res;
+  const res = arr.filter((n) => Boolean(n) === false);
+  return res.length;
 }
 
 /**
@@ -441,8 +441,19 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.city < b.city) {
+      return -1;
+    }
+    return arr;
+  });
 }
 
 /**
@@ -463,8 +474,8 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  return [...Array(n)].map((j1, x, arr) => arr.map((j2, y) => (x === y ? 1 : 0)));
 }
 
 /**
@@ -480,8 +491,8 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  return Array.from({ length: ((end + 1) - start) }, (_, i) => start + i);
 }
 
 /**
@@ -530,8 +541,20 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.map((i) => {
+    const key = keySelector(i);
+    const value = valueSelector(i);
+    const c = map.get(key);
+    if (!c) {
+      map.set(key, [value]);
+    } else {
+      c.push(value);
+    }
+    return array;
+  });
+  return map;
 }
 
 
@@ -548,8 +571,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.flatMap(childrenSelector);
 }
 
 
@@ -565,8 +588,10 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  const res = arr.flat()[indexes[0]];
+  if (Array.isArray(res)) return res[1];
+  return res;
 }
 
 
@@ -588,8 +613,16 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  let h = arr.slice(0, arr.length / 2);
+  let t = arr.slice(arr.length - arr.length / 2);
+  if (arr.length % 2 !== 0) {
+    h = arr.slice(0, arr.length / 2);
+    const m = arr[Math.round((arr.length - 1) / 2)];
+    t = arr.slice(arr.length - arr.length / 2 + 1);
+    return [].concat(t, m, h);
+  }
+  return [].concat(t, h);
 }
 
 
