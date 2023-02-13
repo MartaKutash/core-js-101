@@ -59,9 +59,11 @@ function willYouMarryMe(isPositiveAnswer) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  const n = Promise.all(array).then((values) => (values));
+  return n;
 }
+
 
 /**
  * Return Promise object that should be resolved with value received from
